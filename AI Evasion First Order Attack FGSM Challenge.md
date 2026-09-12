@@ -308,3 +308,6 @@ Run it with:
 ```bash
 python3 solve.py
 ```
+-------------------------
+
+<img width="964" height="407" alt="image" src="https://github.com/user-attachments/assets/e585af04-63fd-4fb1-8072-2b4eee8be5c0" />
