@@ -165,12 +165,18 @@ By implementing DeepFool directly in the model's normalized space, we efficientl
 [*] Local quantized prediction: 9 (Original: 7)
 [*] Submitting to server...
 
-========================================
+
 FLAG: HTB{d33pf00l_k33p5_0n_f00l1ng}
-========================================
+
 
 ----------------------------------------
+The issue is that standard DeepFool finds the *minimal* perturbation to cross the decision boundary, stopping exactly on the line. When we convert the image to an 8-bit PNG, the tiny rounding errors (e.g., `0.499` becoming `0`) shift the image slightly, causing it to fall back into the original class.
 
+Since we have a massive L2 budget (3.5) and DeepFool only used 0.81, we can simply scale the perturbation vector to push the image *deep* into the target class's decision boundary, making it robust to quantization.
+
+Here is the updated script with a **perturbation scaling factor** and a **local quantization check** to guarantee the server accepts it:
+
+```python
 import os
 import io
 import base64
@@ -361,3 +367,4 @@ if __name__ == "__main__":
             print("[-] Validation failed:", data)
     else:
         print(f"[-] Submission failed ({r.status_code}): {r.text}")
+```
